@@ -3,11 +3,11 @@ import time
 from web3 import Web3
 import requests
 
-# Ваш RPC URL
+
 RPC_URL = 'https://base.llamarpc.com'
 web3 = Web3(Web3.HTTPProvider(RPC_URL))
 
-# Список контрактів
+# Контракти
 contracts = [
         '0xE65dFa5C8B531544b5Ae4960AE0345456D87A47D',
         '0x13F294BF5e26843C33d0ae739eDb8d6B178740B0',
@@ -23,7 +23,7 @@ contracts = [
 
 ]
 
-# ABI контракту
+# ABI
 contract_abi = [
     {
         "inputs": [
@@ -49,25 +49,25 @@ contract_abi = [
     }
 ]
 
-# Завантаження приватних ключів з файлу wallets.txt
+
 def load_private_keys(file_path):
     with open(file_path, 'r') as file:
         private_keys = file.read().splitlines()
     return private_keys
 
-# Перевірка наявності токенів
+
 def check_balance(contract, address):
     balance = contract.functions.balanceOf(address).call()
     return balance > 0
 
-# Мінтинг токенів
+
 def mint_tokens(private_key, contract_address, quantity, payable_amount):
     account = web3.eth.account.from_key(private_key)
     contract = web3.eth.contract(address=contract_address, abi=contract_abi)
     nonce = web3.eth.get_transaction_count(account.address)
 
     gas_price = web3.eth.gas_price
-    gas_limit = 200000  # Приблизне значення газу
+    gas_limit = 200000  
 
     transaction_cost = gas_limit * gas_price + payable_amount
     balance = web3.eth.get_balance(account.address)
@@ -91,7 +91,7 @@ def mint_tokens(private_key, contract_address, quantity, payable_amount):
     tx_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
     return tx_hash
 
-# Основна функція
+
 def main():
     private_keys = load_private_keys('wallets.txt')
     quantity = 1
