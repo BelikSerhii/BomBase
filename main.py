@@ -281,7 +281,7 @@ def main():
     private_keys = load_private_keys('wallets.txt')
 
     claim_contract_address = '0x6B033e8199ce2E924813568B716378aA440F4C67'
-    comment_contracts = []
+    #comment_contracts = []
     execute_contract_address = '0x1aeD60A97192157fDA7fb26267A439d523d09c5e'
     simple_mint_contracts = ['0x2aa80a13395425EF3897c9684a0249a5226eA779']
     olimp_contract_address = '0xEEadefc9Df7ed4995cb93f5b5D9b923a7Dff8599'
