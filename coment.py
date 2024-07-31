@@ -76,7 +76,7 @@ def mint_tokens(private_key, contract_address, quantity, payable_amount):
 
     
     estimated_gas = web3.eth.estimate_gas(transaction)
-    gas_limit = int(estimated_gas * 1.2)  
+    gas_limit = int(estimated_gas * random.uniform(1.1, 1.2))  
 
     transaction['gas'] = gas_limit
 
