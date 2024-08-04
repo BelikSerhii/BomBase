@@ -51,15 +51,15 @@ for wallet_address in wallet_addresses:
         checksum_address = web3.to_checksum_address(wallet_address)
         
         total_tokens = 0
-        # Припускаємо, що максимальний можливий ID токена - 7 (можете налаштувати відповідно до вашого контракту)
+        
         for token_id in range(0, 7):
             balance = contract.functions.balanceOf(checksum_address, token_id).call()
             total_tokens += balance
         
         print(f'На гаманці {checksum_address} знаходиться {total_tokens} токенів.')
 
-        # Випадкова пауза між запитами
-        pause_duration = random.uniform(1, 3)  # Пауза між 1 і 3 секундами
+        # Пауза
+        pause_duration = random.uniform(1, 3)  
         time.sleep(pause_duration)
         
     except Exception as e:
