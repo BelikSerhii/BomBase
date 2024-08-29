@@ -3,21 +3,30 @@ import time
 from web3 import Web3
 import requests
 
-# RPC 
+# Ваш RPC URL
 RPC_URL = 'https://base.llamarpc.com'
 web3 = Web3(Web3.HTTPProvider(RPC_URL))
 
-# Контракти
+# Список контрактів
 contracts = [
-    '0xE65dFa5C8B531544b5Ae4960AE0345456D87A47D',
-    '0x13F294BF5e26843C33d0ae739eDb8d6B178740B0',
-    '0xE8aD8b2c5Ec79d4735026f95Ba7C10DCB0D3732B',
-    '0xb5408b7126142C61f509046868B1273F96191b6d',
-    '0xC00F7096357f09d9f5FE335CFD15065326229F66',
-    '0x96E82d88c07eCa6a29B2AD86623397B689380652',
-    '0x955FdFdFd783C89Beb54c85f0a97F0904D85B86C',
-    #'0x615194d9695d0c02Fc30a897F8dA92E17403D61B',
-    '0xb0FF351AD7b538452306d74fB7767EC019Fa10CF'
+    '0xbFa3fF9dcdB811037Bbec89f89E2751114ECD299', #1000
+    '0x8605522B075aFeD48f9987E573E0AA8E572B8452', #1000
+    '0xea50e58B518435AD2CeCE84d1e099b2e0878B9cF', #1000
+    '0x8e50c64310b55729F8EE67c471E052B1Cd7AF5b3', 
+    '0x2a8e46E78BA9667c661326820801695dcf1c403E',
+    '0xb620bEdCe2615A3F35273A08b3e45e3431229A60',
+    '0x95ff853A4C66a5068f1ED8Aaf7c6F4e3bDBEBAE1',
+    '0x4beAdC00E2A6b6C4fAc1a43FF340E5D71CBB9F77',
+    '0x2382456097cC12ce54052084e9357612497FD6be',
+    '0x146B627a763DFaE78f6A409CEF5B8ad84dDD4150',
+    '0x1f006edBc0Bcc528A743ee7A53b5e3dD393A1Df6',
+    '0x13fCcd944B1D88d0670cae18A00abD272256DDeE',
+    '0xd1E1da0b62761b0df8135aE4e925052C8f618458',
+    '0x6A3dA97Dc82c098038940Db5CB2Aa6B1541f2ebe',
+    '0xEb9A3540E6A3dc31d982A47925d5831E02a3Fe1e',
+    '0x892Bc2468f20D40F4424eE6A504e354D9D7E1866',
+    '0x6a43B7e3ebFc915A8021dd05f07896bc092d1415',
+    '0x9FF8Fd82c0ce09caE76e777f47d536579AF2Fe7C'
 ]
 
 # ABI 
@@ -65,18 +74,9 @@ def mint_tokens(private_key, contract_address, quantity, payable_amount):
 
     gas_price = web3.eth.gas_price
 
-    transaction = contract.functions.mintWithComment(account.address, quantity, '').build_transaction({
-        'from': account.address,
-        'value': payable_amount,
-        'gasPrice': gas_price,
-        'nonce': nonce,
-    })
-
     
-    estimated_gas = web3.eth.estimate_gas(transaction)
-    gas_limit = int(estimated_gas * random.uniform(1.1, 1.2))  
-
-    transaction['gas'] = gas_limit
+    
+    gas_limit = int(random.uniform(180000, 300000))
 
     transaction_cost = gas_limit * gas_price + payable_amount
     balance = web3.eth.get_balance(account.address)
@@ -88,6 +88,14 @@ def mint_tokens(private_key, contract_address, quantity, payable_amount):
         print(f'Address {account.address} already has a token. Skipping minting for contract {contract_address}.')
         return None
 
+    transaction = contract.functions.mintWithComment(account.address, quantity, '').build_transaction({
+        'from': account.address,
+        'value': payable_amount,
+        'gas': gas_limit,
+        'gasPrice': gas_price,
+        'nonce': nonce,
+    })
+
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     tx_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
     return tx_hash
@@ -98,11 +106,10 @@ def main():
     quantity = 1
     payable_amount = web3.to_wei(0.0001, 'ether')
 
-    
+    # Перемішати приватні ключі та контракти
     random.shuffle(private_keys)
-    random.shuffle(contracts)
-
     for private_key in private_keys:
+        random.shuffle(contracts)  
         for contract_address in contracts:
             try:
                 tx_hash = mint_tokens(private_key, contract_address, quantity, payable_amount)
