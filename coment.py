@@ -3,7 +3,7 @@ import time
 from web3 import Web3
 import requests
 
-# Ваш RPC URL
+# RPC
 RPC_URL = 'https://base.llamarpc.com'
 web3 = Web3(Web3.HTTPProvider(RPC_URL))
 
